@@ -39,6 +39,9 @@ const char *email = "devel@monitoring-plugins.org";
 #ifdef HAVE_LIBRADIUSCLIENT_NG
 #include <radiusclient-ng.h>
 rc_handle *rch = NULL;
+#elif HAVE_LIBFREERADIUS_CLIENT
+#include <freeradius-client.h>
+rc_handle *rch = NULL;
 #else
 #include <radiusclient.h>
 #endif
@@ -48,20 +51,20 @@ void print_help (void);
 void print_usage (void);
 
 /* libradiusclient(-ng) wrapper functions */
-#ifdef HAVE_LIBRADIUSCLIENT_NG
-#define my_rc_conf_str(a) rc_conf_str(rch,a)
-#define my_rc_send_server(a,b) rc_send_server(rch,a,b)
-#define my_rc_buildreq(a,b,c,d,e,f) rc_buildreq(rch,a,b,c,d,e,f)
-#define my_rc_own_ipaddress() rc_own_ipaddress(rch)
-#define my_rc_avpair_add(a,b,c,d) rc_avpair_add(rch,a,b,c,-1,d)
-#define my_rc_read_dictionary(a) rc_read_dictionary(rch, a)
-#else
+#ifdef HAVE_LIBRADIUSCLIENT
 #define my_rc_conf_str(a) rc_conf_str(a)
 #define my_rc_send_server(a,b) rc_send_server(a, b)
 #define my_rc_buildreq(a,b,c,d,e,f) rc_buildreq(a,b,c,d,e,f)
 #define my_rc_own_ipaddress() rc_own_ipaddress()
 #define my_rc_avpair_add(a,b,c,d) rc_avpair_add(a, b, c, d)
 #define my_rc_read_dictionary(a) rc_read_dictionary(a)
+#else
+#define my_rc_conf_str(a) rc_conf_str(rch,a)
+#define my_rc_send_server(a,b) rc_send_server(rch,a,b)
+#define my_rc_buildreq(a,b,c,d,e,f) rc_buildreq(rch,a,b,c,d,e,f)
+#define my_rc_own_ipaddress() rc_own_ipaddress(rch)
+#define my_rc_avpair_add(a,b,c,d) rc_avpair_add(rch,a,b,c,-1,d)
+#define my_rc_read_dictionary(a) rc_read_dictionary(rch, a)
 #endif
 
 /* REJECT_RC is only defined in some version of radiusclient. It has
@@ -392,10 +395,10 @@ print_usage (void)
 
 int my_rc_read_config(char * a)
 {
-#ifdef HAVE_LIBRADIUSCLIENT_NG
+#ifdef HAVE_LIBRADIUSCLIENT
+	return rc_read_config(a);
+#else
 	rch = rc_read_config(a);
 	return (rch == NULL) ? 1 : 0;
-#else
-	return rc_read_config(a);
 #endif
 }
