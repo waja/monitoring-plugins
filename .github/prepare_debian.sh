@@ -53,7 +53,7 @@ cp tools/squid.conf /etc/squid/squid.conf
 service squid start
 
 # mariadb
-service mariadb start
+service mariadb start || service mysql start
 mysql -e "create database IF NOT EXISTS test;" -uroot
 
 # ldap
