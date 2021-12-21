@@ -5,6 +5,7 @@ set -e
 
 export DEBIAN_FRONTEND=noninteractive
 
+. .github/os_detect.sh
 #sed "s/main/non-free contrib/g" /etc/apt/sources.list.d/debian.sources > /etc/apt/sources.list.d/debian-nonfree.sources
 #apt-get update
 #apt-get -y install software-properties-common
@@ -68,32 +69,68 @@ ip addr show
 
 cat /etc/hosts
 
+echo $distro_id
+
 # apache
-a2enmod ssl
-a2ensite default-ssl
+[ -x /usr/sbin/a2enmod ] && a2enmod ssl
+[ -x /usr/sbin/a2ensite ] && a2ensite default-ssl
 # replace snakeoil certs with openssl generated ones as the make-ssl-cert ones
 # seems to cause problems with our plugins
-rm /etc/ssl/certs/ssl-cert-snakeoil.pem
-rm /etc/ssl/private/ssl-cert-snakeoil.key
-openssl req -nodes -newkey rsa:2048 -x509 -sha256 -days 365 -nodes -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=$(hostname)"
-service apache2 restart
+if [ -d /etc/ssl/private/ ]; then
+	KEY="/etc/ssl/private/ssl-cert-snakeoil.key"
+	CERT="/etc/ssl/certs/ssl-cert-snakeoil.pem"
+elif [ -d /etc/pki/tls/private/ ]; then
+	KEY="/etc/pki/tls/private/localhost.key"
+	CERT="/etc/pki/tls/certs/localhost.crt"
+elif [ -d /etc/apache2/ssl.key/ ]; then
+	KEY="/etc/apache2/ssl.key/server.key"
+	CERT="/etc/apache2/ssl.crt/server.crt"
+	sed -i "s/#SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/" /etc/apache2/ssl-global.conf
+	sed -i "s/#SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/" /etc/apache2/ssl-global.conf
+fi
+rm -f $KEY $CERT
+openssl req -nodes -newkey rsa:2048 -x509 -sha256 -days 365 -nodes -keyout $KEY -out $CERT -subj "/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=$(hostname)"
+if [ -x "$(command -v apache2)" ]; then
+	APACHE_BIN="$(basename $(command -v apache2))"
+elif [ -x "$(command -v httpd)" ]; then
+	APACHE_BIN="$(basename $(command -v httpd))"
+else
+	echo "No apache binary found"
+	exit 1
+fi
+
+[ -x /usr/sbin/service ] && service $APACHE_BIN restart || $APACHE_BIN
+ps aux | grep -E "(apache|http)"
 
 # squid
 cp tools/squid.conf /etc/squid/squid.conf
-service squid start
+[ -x /usr/sbin/service -a -n "$(command -v squid)" ] && service squid start || squid
+ps aux | grep squid
 
 # mariadb
-service mariadb start || service mysql start
+case "$distro_id" in
+    'debian'|'ubuntu')
+	[ -x /usr/sbin/service -a -n "$(command -v mariadb)" ] && service mariadb start
+	;;
+    *)
+	HOME=$(pwd)
+	mkdir -p /var/lib/mysql/ /var/log/mariadb /var/log/mysql  && mysql_install_db > /dev/null && chown -R mysql /var/lib/mysql/ /var/log/mariadb /var/log/mysql && cd '/usr' ; /usr/bin/mysqld_safe --datadir='/var/lib/mysql' --nowatch
+	cd $HOME
+	sleep 3
+	;;
+esac
+ps aux | grep -E "(mysql|mariadb)"
 mysql -e "create database IF NOT EXISTS test;" -uroot
 
 # ldap
 sed -e 's/cn=admin,dc=nodomain/'$(/usr/sbin/slapcat|grep ^dn:|head -1|awk '{print $2}')'/' -i .github/NPTest.cache
-service slapd start
+[ -x /usr/sbin/service -a -n "$(command -v slapd)" ] && service slapd start || /usr/sbin/slapd -h "ldap:///" -g ldap -u ldap -F /etc/openldap/slapd.d
+ps aux| grep slapd
 
 # sshd
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-service ssh start
+[ -x /usr/sbin/service -a -n "$(command -v ssh)" ] && service ssh start
 sleep 1
 ssh-keyscan localhost >> ~/.ssh/known_hosts
 touch ~/.ssh/config
@@ -111,16 +148,16 @@ for DIR in /usr/share/snmp/mibs /usr/share/mibs; do
 done
 mkdir -p /var/lib/snmp/mib_indexes
 sed -e 's/^agentaddress.*/agentaddress 127.0.0.1/' -i /etc/snmp/snmpd.conf
-service snmpd start
+[ -x /usr/sbin/service -a -n "$(command -v snmpd)" ] && service snmpd start
 
 # start cron, will be used by check_nagios
 cron
 
 # start postfix
-service postfix start
+[ -x /usr/sbin/service -a -n "$(command -v postfix)" ] && service postfix start
 
 # start ftpd
-service vsftpd start
+[ -x /usr/sbin/service -a -n "$(command -v vsftpd)" ] && service vsftpd start
 
 # hostname
 sed "/NP_HOST_TLS_CERT/s/.*/'NP_HOST_TLS_CERT' => '$(hostname)',/" -i /src/.github/NPTest.cache
