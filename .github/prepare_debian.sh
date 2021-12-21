@@ -87,7 +87,7 @@ service mariadb start || service mysql start
 mysql -e "create database IF NOT EXISTS test;" -uroot
 
 # ldap
-sed -e 's/cn=admin,dc=nodomain/'$(/usr/sbin/slapcat|grep ^dn:|awk '{print $2}')'/' -i .github/NPTest.cache
+sed -e 's/cn=admin,dc=nodomain/'$(/usr/sbin/slapcat|grep ^dn:|head -1|awk '{print $2}')'/' -i .github/NPTest.cache
 service slapd start
 
 # sshd
