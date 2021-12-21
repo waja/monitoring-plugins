@@ -5,58 +5,58 @@ set -e
 
 export DEBIAN_FRONTEND=noninteractive
 
-sed "s/main/non-free contrib/g" /etc/apt/sources.list.d/debian.sources > /etc/apt/sources.list.d/debian-nonfree.sources
-apt-get update
-apt-get -y install software-properties-common
-if [ $(lsb_release -is) = "Debian" ]; then
-  apt-add-repository non-free
-  apt-get update
-fi
-apt-get -y install perl \
-	autotools-dev \
-	libdbi-dev \
-	libldap2-dev \
-	libpq-dev \
-	libradcli-dev \
-	libnet-snmp-perl \
-	procps \
-	libdbi0-dev \
-	libdbd-sqlite3 \
-	libssl-dev \
-	dnsutils \
-	snmp-mibs-downloader \
-	libsnmp-perl \
-	snmpd \
-	fping \
-	snmp \
-	netcat-openbsd \
-	smbclient \
-	vsftpd \
-	apache2 \
-	ssl-cert \
-	postfix \
-	libhttp-daemon-ssl-perl \
-	libdbd-sybase-perl \
-	libnet-dns-perl \
-	slapd \
-	ldap-utils \
-	gcc \
-	make \
-	autoconf \
-	automake \
-	gettext \
-	faketime \
-	libmonitoring-plugin-perl \
-	libcurl4-openssl-dev \
-	liburiparser-dev \
-	squid \
-	openssh-server \
-	mariadb-server \
-	mariadb-client \
-	libmariadb-dev \
-	cron \
-	iputils-ping \
-	iproute2
+#sed "s/main/non-free contrib/g" /etc/apt/sources.list.d/debian.sources > /etc/apt/sources.list.d/debian-nonfree.sources
+#apt-get update
+#apt-get -y install software-properties-common
+#if [ $(lsb_release -is) = "Debian" ]; then
+#  apt-add-repository non-free
+#  apt-get update
+#fi
+#apt-get -y install perl \
+#	autotools-dev \
+#	libdbi-dev \
+#	libldap2-dev \
+#	libpq-dev \
+#	libradcli-dev \
+#	libnet-snmp-perl \
+#	procps \
+#	libdbi0-dev \
+#	libdbd-sqlite3 \
+#	libssl-dev \
+#	dnsutils \
+#	snmp-mibs-downloader \
+#	libsnmp-perl \
+#	snmpd \
+#	fping \
+#	snmp \
+#	netcat-openbsd \
+#	smbclient \
+#	vsftpd \
+#	apache2 \
+#	ssl-cert \
+#	postfix \
+#	libhttp-daemon-ssl-perl \
+#	libdbd-sybase-perl \
+#	libnet-dns-perl \
+#	slapd \
+#	ldap-utils \
+#	gcc \
+#	make \
+#	autoconf \
+#	automake \
+#	gettext \
+#	faketime \
+#	libmonitoring-plugin-perl \
+#	libcurl4-openssl-dev \
+#	liburiparser-dev \
+#	squid \
+#	openssh-server \
+#	mariadb-server \
+#	mariadb-client \
+#	libmariadb-dev \
+#	cron \
+#	iputils-ping \
+#	iproute2
 
 # remove ipv6 interface from hosts
 if [ $(ip addr show | grep "inet6 ::1" | wc -l) -eq "0" ]; then

@@ -52,9 +52,9 @@ jobs:
 #          - 'ubuntu:rolling'
 #          #...
         include:
-          - {"distro": "ubuntu:latest", "prepare": ".github/prepare_debian.sh"}
-          - {"distro": "ubuntu:rolling", "prepare": ".github/prepare_debian.sh"}
-          - {"distro": "debian:testing", "prepare": ".github/prepare_debian.sh"}
+          - {"distro": "ubuntu:latest", "prepare": ".github/prepare.sh"}
+          - {"distro": "ubuntu:rolling", "prepare": ".github/prepare.sh"}
+          - {"distro": "debian:testing", "prepare": ".github/prepare.sh"}
           #...
     steps:
       - name: Git clone repository
@@ -72,7 +72,8 @@ jobs:
               -v /var/run/utmp:/var/run/utmp \
               --mount source=tmp-vol,destination=/src,target=/media/ramdisk2 \
               ${{ matrix.distro }} \
-              /bin/sh -c '${{ matrix.prepare }} && \
+              /bin/sh -c '.github/install_dependencies.sh && \
+                ${{ matrix.prepare }} && \
                 tools/setup && \
                 ./configure --enable-libtap  --with-ipv6=no && \
                 make && \
