@@ -15,10 +15,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro:
-          - 'debian:testing'
-          #...
+#        distro:
+#          - 'debian:testing'
+#          - 'ubuntu:latest'
+#          - 'ubuntu:rolling'
+#          #...
         include:
+          - {"distro": "ubuntu:latest", "prepare": ".github/prepare_debian.sh"}
+          - {"distro": "ubuntu:rolling", "prepare": ".github/prepare_debian.sh"}
           - distro: 'debian:testing'
             prepare: .github/prepare_debian.sh
           #...
