@@ -52,8 +52,8 @@ jobs:
 #          - 'ubuntu:rolling'
 #          #...
         include:
-          - {"distro": "ubuntu:latest", "prepare": ".github/prepare.sh"}
-          - {"distro": "ubuntu:rolling", "prepare": ".github/prepare.sh"}
+#          - {"distro": "ubuntu:latest", "prepare": ".github/prepare.sh"}
+#          - {"distro": "ubuntu:rolling", "prepare": ".github/prepare.sh"}
           - {"distro": "debian:testing", "prepare": ".github/prepare.sh"}
           - {"distro": "fedora:latest", "prepare": ".github/prepare.sh"}
 #          - {"distro": "fedora:rawhide", "prepare": ".github/prepare.sh"}
