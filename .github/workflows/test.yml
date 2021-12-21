@@ -54,8 +54,7 @@ jobs:
         include:
           - {"distro": "ubuntu:latest", "prepare": ".github/prepare_debian.sh"}
           - {"distro": "ubuntu:rolling", "prepare": ".github/prepare_debian.sh"}
-          - distro: 'debian:testing'
-            prepare: .github/prepare_debian.sh
+          - {"distro": "debian:testing", "prepare": ".github/prepare_debian.sh"}
           #...
     steps:
       - name: Git clone repository
