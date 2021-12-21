@@ -55,6 +55,13 @@ jobs:
           - {"distro": "ubuntu:latest", "prepare": ".github/prepare.sh"}
           - {"distro": "ubuntu:rolling", "prepare": ".github/prepare.sh"}
           - {"distro": "debian:testing", "prepare": ".github/prepare.sh"}
+          - {"distro": "fedora:latest", "prepare": ".github/prepare.sh"}
+#          - {"distro": "fedora:rawhide", "prepare": ".github/prepare.sh"}
+          - {"distro": "centos:latest", "prepare": ".github/prepare.sh"}
+#          - {"distro": "centos:7", "prepare": ".github/prepare.sh"}
+#          - {"distro": "archlinux:base", "prepare": ".github/prepare.sh"}
+#          - {"distro": "alpine:edge", "prepare": ".github/prepare.sh"}
+#          - {"distro": "alpine:latest", "prepare": ".github/prepare.sh"}
           #...
     steps:
       - name: Git clone repository
