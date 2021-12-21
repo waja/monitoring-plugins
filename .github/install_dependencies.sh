@@ -1,5 +1,6 @@
 #!/bin/sh -e
 # See https://raw.githubusercontent.com/Exiv2/exiv2/main/ci/install_dependencies.sh
+# and https://github.com/netdata/netdata/blob/c9a3c837f4028edc5a6b9bd8ef6d7cb523f96115/packaging/installer/install-required-packages.sh
 
 # workaround for really bare-bones Archlinux containers:
 if [ -x "$(command -v pacman)" ]; then
@@ -7,7 +8,16 @@ if [ -x "$(command -v pacman)" ]; then
     pacman --noconfirm -S grep gawk sed
 fi
 
-distro_id=$(grep '^ID=' /etc/os-release|awk -F = '{print $2}'|sed 's/\"//g')
+os_release_file=
+if [ -s "/etc/os-release" ]; then
+  os_release_file="/etc/os-release"
+elif [ -s "/usr/lib/os-release" ]; then
+  os_release_file="/usr/lib/os-release"
+else
+  echo >&2 "Cannot find an os-release file ..."
+  return 1
+fi
+distro_id=$(grep '^ID=' $os_release_file|awk -F = '{print $2}'|sed 's/\"//g')
 
 case "$distro_id" in
     'fedora')
