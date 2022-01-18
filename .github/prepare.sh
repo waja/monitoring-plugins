@@ -128,6 +128,7 @@ sed -e 's/cn=admin,dc=nodomain/'$(/usr/sbin/slapcat|grep ^dn:|head -1|awk '{prin
 ps aux| grep slapd
 
 # sshd
+mkdir -p ~/.ssh
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 [ -x /usr/sbin/service -a -n "$(command -v ssh)" ] && service ssh start
