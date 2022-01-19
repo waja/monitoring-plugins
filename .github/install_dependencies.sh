@@ -25,7 +25,7 @@
 case "$distro_id" in
     'fedora')
         #dnf -y --refresh install $rpm_packages
-        dnf -y --refresh install perl libdbi-devel openldap-devel libpq-devel radcli-compat-devel freeradius-devel procps libdbi-devel libdbi-dbd-sqlite openssl-devel bind-utils net-snmp-perl net-snmp fping net-snmp-utils netcat samba-client vsftpd httpd postfix perl-HTTP-Daemon-SSL perl-Net-DNS openldap-clients openldap-servers gcc make autoconf automake gettext libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb mariadb-server mariadb-devel cronie iputils iproute perl-Net-SNMP
+        dnf -y --refresh install perl libdbi-devel openldap-devel libpq-devel radcli-compat-devel freeradius-devel procps libdbi-devel libdbi-dbd-sqlite openssl-devel bind-utils net-snmp-perl net-snmp fping net-snmp-utils netcat samba-client vsftpd httpd postfix perl-HTTP-Daemon-SSL perl-Net-DNS openldap-clients openldap-servers gcc make autoconf automake gettext libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb mariadb-server mariadb-devel cronie iputils iproute perl-Net-SNMP openssh-clients
         ;;
 
     'debian'|'ubuntu')
@@ -70,7 +70,7 @@ case "$distro_id" in
         #yum -y install $rpm_packages
         #yum -y install autoconf automake iputils libdbi-devel libtool mysql-devel net-snmp-devel openssh openssl-devel net-snmp-perl net-snmp-utils postfix postgresql-devel procps samba-client freeradius-client-devel rpcbind krb5-devel heimdal-devel iproute httpd perl-Net-SNMP
         # libsmbclient-devel openldap2-devel
-        yum -y install perl libdbi-devel openldap-devel libpq-devel radcli-compat-devel freeradius-devel procps libdbi-devel libdbi-dbd-sqlite openssl-devel bind-utils net-snmp-perl net-snmp fping net-snmp-utils netcat samba-client vsftpd httpd postfix perl-HTTP-Daemon-SSL perl-Net-DNS openldap-clients openldap-servers gcc make autoconf automake gettext libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb mariadb-server mariadb-devel cronie iputils iproute perl-Net-SNMP
+        yum -y install perl libdbi-devel openldap-devel libpq-devel radcli-compat-devel freeradius-devel procps libdbi-devel libdbi-dbd-sqlite openssl-devel bind-utils net-snmp-perl net-snmp fping net-snmp-utils netcat samba-client vsftpd httpd postfix perl-HTTP-Daemon-SSL perl-Net-DNS openldap-clients openldap-servers gcc make autoconf automake gettext libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb mariadb-server mariadb-devel cronie iputils iproute perl-Net-SNMP openssh-clients
         ;;
 
     'opensuse-tumbleweed'|'opensuse-leap')
@@ -78,7 +78,7 @@ case "$distro_id" in
         #zypper --non-interactive install $rpm_packages
         #zypper --non-interactive install autoconf automake iputils libdbi-devel libsmbclient-devel libtool net-snmp-devel openldap2-devel openssh postfix postgresql-devel procps samba-client freeradius-client-devel rpcbind krb5-devel iproute perl-Net-SNMP perl-Digest-SHA1 httpd
         # net-snmp-perl net-snmp-utils openssl-devel mysql-devel heimdal-devel
-        zypper --non-interactive install perl libdbi-devel radcli-compat-devel procps libdbi-devel bind-utils net-snmp fping samba-client vsftpd postfix perl-Net-DNS gcc make autoconf automake libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb cronie iputils perl-Net-SNMP libmariadb-devel libopenssl-devel perl-HTTPS-Daemon gettext-tools netcat-openbsd apache2 iproute2 openldap2-devel libdbi-drivers-dbd-sqlite3 postgresql-devel openldap2-client openldap2
+        zypper --non-interactive install perl libdbi-devel radcli-compat-devel procps libdbi-devel bind-utils net-snmp fping samba-client vsftpd postfix perl-Net-DNS gcc make autoconf automake libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb cronie iputils perl-Net-SNMP libmariadb-devel libopenssl-devel perl-HTTPS-Daemon gettext-tools netcat-openbsd apache2 iproute2 openldap2-devel libdbi-drivers-dbd-sqlite3 postgresql-devel openldap2-client openldap2 openssh-clients
         # mariadb-devel net-snmp-perl net-snmp-utils openssl-devel perl-HTTP-Daemon-SSL gettext netcat httpd iproute openldap-devel freeradius-devel libdbi-dbd-sqlite libpq-devel openldap-clients freeradius-client-devel
         ;;
     *)
