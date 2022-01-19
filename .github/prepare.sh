@@ -123,9 +123,10 @@ ps aux | grep -E "(mysql|mariadb)"
 mysql -e "create database IF NOT EXISTS test;" -uroot
 
 # ldap
+[ -x /etc/openldap/slapd.conf ] && cat /etc/openldap/slapd.conf && sed -i "s/^#modulepath/modulepath/g" /etc/openldap/slapd.conf && sed -i "s/^#moduleload back_mdb/moduleload back_mdb/g" /etc/openldap/slapd.conf
 sed -e 's/cn=admin,dc=nodomain/'$(/usr/sbin/slapcat|grep ^dn:|head -1|awk '{print $2}')'/' -i .github/NPTest.cache
-[ -x /usr/libexec/openldap/check-config.sh ] && sh /usr/libexec/openldap/check-config.sh
-[ -x /usr/sbin/service -a -n "$(command -v slapd)" ] && service slapd start || /usr/lib/openldap/start || /usr/sbin/slapd -u ldap -h "ldap:/// ldaps:/// ldapi:///" || /usr/sbin/slapd -h "ldap:///" -g ldap -u ldap -F /etc/openldap/slapd.d
+[ -x /usr/libexec/openldap/check-config.sh ] && sh /usr/libexec/openldap/check-config.sh || [ -d /var/lib/ldap/ ] && chown -R "$(grep ldap /etc/passwd | cut -d: -f1)":"$(grep ldap /etc/passwd | cut -d: -f1)" /var/lib/ldap/
+[ -x /usr/sbin/service -a -n "$(command -v slapd)" ] && service slapd start || /usr/sbin/slapd -u ldap -h "ldap:/// ldaps:/// ldapi:///" || /usr/sbin/slapd -h "ldap:///" -g ldap -u ldap -F /etc/openldap/slapd.d || /usr/lib/openldap/start
 ps aux| grep slapd
 
 # sshd
