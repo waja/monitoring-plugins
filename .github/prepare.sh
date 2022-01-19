@@ -124,7 +124,8 @@ mysql -e "create database IF NOT EXISTS test;" -uroot
 
 # ldap
 sed -e 's/cn=admin,dc=nodomain/'$(/usr/sbin/slapcat|grep ^dn:|head -1|awk '{print $2}')'/' -i .github/NPTest.cache
-[ -x /usr/sbin/service -a -n "$(command -v slapd)" ] && service slapd start || /usr/sbin/slapd -h "ldap:///" -g ldap -u ldap -F /etc/openldap/slapd.d
+[ -x /usr/libexec/openldap/check-config.sh ] && sh /usr/libexec/openldap/check-config.sh
+[ -x /usr/sbin/service -a -n "$(command -v slapd)" ] && service slapd start || /usr/lib/openldap/start || /usr/sbin/slapd -u ldap -h "ldap:/// ldaps:/// ldapi:///" || /usr/sbin/slapd -h "ldap:///" -g ldap -u ldap -F /etc/openldap/slapd.d
 ps aux| grep slapd
 
 # sshd
