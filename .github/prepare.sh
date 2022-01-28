@@ -133,6 +133,7 @@ ps aux| grep slapd
 mkdir -p ~/.ssh
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+[ -x /usr/libexec/openssh/sshd-keygen ] && /usr/libexec/openssh/sshd-keygen rsa && /usr/libexec/openssh/sshd-keygen ecdsa && /usr/libexec/openssh/sshd-keygen ed25519 
 [ -x /usr/sbin/service -a -n "$(command -v ssh)" ] && service ssh start
 sleep 1
 ssh-keyscan localhost >> ~/.ssh/known_hosts

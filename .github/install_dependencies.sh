@@ -63,9 +63,19 @@ case "$distro_id" in
         apk add gcc g++ make
         ;;
 
-    'centos'|'rhel')
+    'centos'|'rhel'|'almalinux'|'rocky')
+	dnf install -y 'dnf-command(config-manager)'
+	if [ "$distro_id" == "almalinux" ]; then
+		curl https://git.rockylinux.org/original/rpms/rocky-release/-/raw/r8/SOURCES/Rocky-Plus.repo -so /etc/yum.repos.d/Rocky-Plus.repo && curl https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-rockyofficial -so /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial
+	fi
+	dnf config-manager --enable plus powertools
+	#if [ "$distro_id" == "rocky" -o "$distro_id" == "almalinux" ]; then
+	#	dnf config-manager --enable plus
+	#fi
+	yum repolist all
         yum -y update libarchive # workaround for https://bugs.centos.org/view.php?id=18212
         yum -y install epel-release
+	#dnf config-manager --enable powertools
         yum clean all
         #yum -y install $rpm_packages
         #yum -y install autoconf automake iputils libdbi-devel libtool mysql-devel net-snmp-devel openssh openssl-devel net-snmp-perl net-snmp-utils postfix postgresql-devel procps samba-client freeradius-client-devel rpcbind krb5-devel heimdal-devel iproute httpd perl-Net-SNMP
