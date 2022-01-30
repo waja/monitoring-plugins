@@ -159,7 +159,7 @@ sed -e 's/^agentaddress.*/agentaddress 127.0.0.1/' -i /etc/snmp/snmpd.conf
 [ -x /usr/sbin/service -a -n "$(command -v snmpd)" ] && service snmpd start || snmpd
 
 # start postfix
-[ -x /usr/sbin/service -a -n "$(command -v postfix)" ] && service postfix start
+[ -x /usr/sbin/service -a -n "$(command -v postfix)" ] && service postfix start || postfix start
 
 # start ftpd
 [ -x /usr/sbin/service -a -n "$(command -v vsftpd)" ] && service vsftpd start
