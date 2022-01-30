@@ -77,6 +77,8 @@ sed -i 's/procname = "cron"/procname = "sshd"/' ./plugins/t/check_nagios.t
 # apache
 [ -x /usr/sbin/a2enmod ] && a2enmod ssl
 [ -x /usr/sbin/a2ensite ] && a2ensite default-ssl
+# create empty index.html
+[ -d touch /srv/www/htdocs ] && touch touch /srv/www/htdocs/index.html
 # replace snakeoil certs with openssl generated ones as the make-ssl-cert ones
 # seems to cause problems with our plugins
 if [ -d /etc/ssl/private/ ]; then
