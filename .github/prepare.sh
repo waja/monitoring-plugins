@@ -135,7 +135,7 @@ ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 [ -x /usr/libexec/openssh/sshd-keygen ] && /usr/libexec/openssh/sshd-keygen rsa && /usr/libexec/openssh/sshd-keygen ecdsa && /usr/libexec/openssh/sshd-keygen ed25519
 [ -x /usr/sbin/sshd-gen-keys-start ] && /usr/sbin/sshd-gen-keys-start
-[ -x /usr/sbin/service -a -n "$(command -v ssh)" ] && service ssh start || /usr/sbin/sshd -D
+[ -x /usr/sbin/service -a -n "$(command -v ssh)" ] && service ssh start || /usr/sbin/sshd
 sleep 1
 ssh-keyscan localhost >> ~/.ssh/known_hosts
 touch ~/.ssh/config
