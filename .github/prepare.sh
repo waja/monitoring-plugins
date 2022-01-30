@@ -133,15 +133,16 @@ sed -e 's/cn=admin,dc=nodomain/'$(/usr/sbin/slapcat|grep ^dn:|head -1|awk '{prin
 ps aux| grep slapd
 
 # sshd
-mkdir -p ~/.ssh
-ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+SSH_HOME="/root/.ssh"
+mkdir -p $SSH_HOME
+ssh-keygen -t rsa -N "" -f $SSH_HOME/id_rsa
+cat $SSH_HOME/id_rsa.pub >> $SSH_HOME/authorized_keys
 [ -x /usr/libexec/openssh/sshd-keygen ] && /usr/libexec/openssh/sshd-keygen rsa && /usr/libexec/openssh/sshd-keygen ecdsa && /usr/libexec/openssh/sshd-keygen ed25519
 [ -x /usr/sbin/sshd-gen-keys-start ] && /usr/sbin/sshd-gen-keys-start
 [ -x /usr/sbin/service -a -n "$(command -v ssh)" ] && service ssh start || /usr/sbin/sshd
 sleep 1
-ssh-keyscan localhost >> ~/.ssh/known_hosts
-touch ~/.ssh/config
+ssh-keyscan localhost >> $SSH_HOME/known_hosts
+touch $SSH_HOME/config
 
 # start one login session, required for check_users
 ssh -tt localhost </dev/null >/dev/null 2>/dev/null &
