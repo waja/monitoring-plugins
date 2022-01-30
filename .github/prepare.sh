@@ -153,7 +153,7 @@ for DIR in /usr/share/snmp/mibs /usr/share/mibs; do
 done
 mkdir -p /var/lib/snmp/mib_indexes
 sed -e 's/^agentaddress.*/agentaddress 127.0.0.1/' -i /etc/snmp/snmpd.conf
-[ -x /usr/sbin/service -a -n "$(command -v snmpd)" ] && service snmpd start
+[ -x /usr/sbin/service -a -n "$(command -v snmpd)" ] && service snmpd start || snmpd
 
 # start cron, will be used by check_nagios
 cron
