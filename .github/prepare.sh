@@ -55,7 +55,6 @@ export DEBIAN_FRONTEND=noninteractive
 #	mariadb-server \
 #	mariadb-client \
 #	libmariadb-dev \
-#	cron \
 #	iputils-ping \
 #	iproute2
 
@@ -70,6 +69,10 @@ ip addr show
 cat /etc/hosts
 
 echo $distro_id
+
+# replace cron with sshd in the check_nagios test, so we don't need to install (and start) cron
+# which is not available on rhel based distros
+sed -i 's/procname = "cron"/procname = "sshd"/' ./plugins/t/check_nagios.t
 
 # apache
 [ -x /usr/sbin/a2enmod ] && a2enmod ssl
@@ -154,9 +157,6 @@ done
 mkdir -p /var/lib/snmp/mib_indexes
 sed -e 's/^agentaddress.*/agentaddress 127.0.0.1/' -i /etc/snmp/snmpd.conf
 [ -x /usr/sbin/service -a -n "$(command -v snmpd)" ] && service snmpd start || snmpd
-
-# start cron, will be used by check_nagios
-cron
 
 # start postfix
 [ -x /usr/sbin/service -a -n "$(command -v postfix)" ] && service postfix start
