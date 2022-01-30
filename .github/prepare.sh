@@ -162,7 +162,7 @@ sed -e 's/^agentaddress.*/agentaddress 127.0.0.1/' -i /etc/snmp/snmpd.conf
 [ -x /usr/sbin/service -a -n "$(command -v postfix)" ] && service postfix start || postfix start
 
 # start ftpd
-[ -x /usr/sbin/service -a -n "$(command -v vsftpd)" ] && service vsftpd start
+[ -x /usr/sbin/service -a -n "$(command -v vsftpd)" ] && service vsftpd start || /usr/sbin/vsftpd /etc/vsftpd.conf &
 
 # hostname
 sed "/NP_HOST_TLS_CERT/s/.*/'NP_HOST_TLS_CERT' => '$(hostname)',/" -i /src/.github/NPTest.cache
