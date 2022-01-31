@@ -124,6 +124,8 @@ case "$distro_id" in
 	;;
     *)
 	HOME=$(pwd)
+	# Fix socket
+	sed -i "s/socket=.*mysql.sock/socket=\/var\/run\/mysqld\/mysqld.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
 	mkdir -p /var/lib/mysql/ /var/log/mariadb /var/log/mysql  && mysql_install_db > /dev/null && chown -R mysql /var/lib/mysql/ /var/log/mariadb /var/log/mysql && cd '/usr' ; /usr/bin/mysqld_safe --datadir='/var/lib/mysql' --nowatch
 	cd $HOME
 	sleep 3
