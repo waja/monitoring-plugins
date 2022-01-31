@@ -108,6 +108,7 @@ else
 fi
 
 [ -x /usr/sbin/service ] && service $APACHE_BIN restart || $APACHE_BIN -D SSL
+$APACHE_BIN -D SSL -S
 ps aux | grep -E "(apache|http)"
 curl -Ik https://localhost --verbose
 
