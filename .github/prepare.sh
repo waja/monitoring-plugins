@@ -89,7 +89,7 @@ if [ -d /etc/apache2/ssl.key/ ]; then
 	sed -i "s/#SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/" /etc/apache2/ssl-global.conf
 	sed -i "s/#SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/" /etc/apache2/ssl-global.conf
 	ln -s $KEY /etc/apache2/ssl.key/vhost-example.key && ln -s $CERT /etc/apache2/ssl.crt/vhost-example.crt
-	cp cp /etc/apache2/vhosts.d/vhost-ssl.template /etc/apache2/vhosts.d/vhost-ssl.conf
+	cp /etc/apache2/vhosts.d/vhost-ssl.template /etc/apache2/vhosts.d/vhost-ssl.conf
 elif [ -d /etc/ssl/private/ ]; then
 	KEY="/etc/ssl/private/ssl-cert-snakeoil.key"
 	CERT="/etc/ssl/certs/ssl-cert-snakeoil.pem"
