@@ -57,7 +57,7 @@ jobs:
           - {"distro": "debian:testing", "prepare": ".github/prepare.sh"}
           - {"distro": "fedora:latest", "prepare": ".github/prepare.sh"}
 #          - {"distro": "fedora:rawhide", "prepare": ".github/prepare.sh"}
-          - {"distro": "centos:8", "prepare": ".github/prepare.sh"}
+          - {"distro": "centos:7", "prepare": ".github/prepare.sh"}
           - {"distro": "rockylinux:8", "prepare": ".github/prepare.sh"}
 #          - {"distro": "rockylinux:latest", "prepare": ".github/prepare.sh"}
           - {"distro": "almalinux:8", "prepare": ".github/prepare.sh"}
