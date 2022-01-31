@@ -108,7 +108,7 @@ else
 	exit 1
 fi
 
-[ -x /usr/sbin/service ] && service $APACHE_BIN restart || $APACHE_BIN -D SSL | $APACHE_BIN -D SSL -S
+[ -x /usr/sbin/service ] && service $APACHE_BIN restart || $APACHE_BIN -D SSL || $APACHE_BIN -D SSL -S
 ps aux | grep -E "(apache|http)"
 ss -tapn
 curl -Ik https://localhost --verbose
