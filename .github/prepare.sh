@@ -80,6 +80,7 @@ sed -i 's/procname = "cron"/procname = "sshd"/' ./plugins/t/check_nagios.t
 [ -x /usr/sbin/a2enflag ] && a2enflag SSL
 # create empty index.html
 [ -d touch /srv/www/htdocs ] && touch touch /srv/www/htdocs/index.html
+[ -d touch /var/www/html ] && touch touch /var/www/html/index.html
 # replace snakeoil certs with openssl generated ones as the make-ssl-cert ones
 # seems to cause problems with our plugins
 if [ -d /etc/apache2/ssl.key/ ]; then
