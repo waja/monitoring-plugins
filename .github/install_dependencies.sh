@@ -92,6 +92,7 @@ case "$distro_id" in
         #zypper --non-interactive install autoconf automake iputils libdbi-devel libsmbclient-devel libtool net-snmp-devel openldap2-devel openssh postfix postgresql-devel procps samba-client freeradius-client-devel rpcbind krb5-devel iproute perl-Net-SNMP perl-Digest-SHA1 httpd
         # net-snmp-perl net-snmp-utils openssl-devel mysql-devel heimdal-devel
         zypper --non-interactive install perl which libdbi-devel radcli-compat-devel procps libdbi-devel bind-utils net-snmp fping samba-client vsftpd postfix perl-Net-DNS gcc make autoconf automake libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb iputils perl-Net-SNMP libmariadb-devel libopenssl-devel perl-HTTPS-Daemon gettext-tools netcat-openbsd apache2 iproute2 openldap2-devel libdbi-drivers-dbd-sqlite3 postgresql-devel openldap2-client openldap2 openssh-clients libcurl-devel
+	zypper --non-interactive install curl
         # mariadb-devel net-snmp-perl net-snmp-utils openssl-devel perl-HTTP-Daemon-SSL gettext netcat httpd iproute openldap-devel freeradius-devel libdbi-dbd-sqlite libpq-devel openldap-clients freeradius-client-devel
         ;;
     *)
