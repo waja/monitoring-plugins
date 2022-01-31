@@ -109,6 +109,7 @@ fi
 
 [ -x /usr/sbin/service ] && service $APACHE_BIN restart || $APACHE_BIN -D SSL
 ps aux | grep -E "(apache|http)"
+curl -Ik https://localhost --verbose
 
 # squid
 cp tools/squid.conf /etc/squid/squid.conf
