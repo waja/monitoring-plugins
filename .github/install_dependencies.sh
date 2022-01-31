@@ -66,6 +66,9 @@ case "$distro_id" in
         ;;
 
     'centos'|'rhel'|'almalinux'|'rocky')
+        yum -y update libarchive # workaround for https://bugs.centos.org/view.php?id=18212
+        yum -y install epel-release
+	yum -y install dnf
 	dnf install -y 'dnf-command(config-manager)'
 	if [ "$distro_id" == "almalinux" ]; then
 		curl https://git.rockylinux.org/original/rpms/rocky-release/-/raw/r8/SOURCES/Rocky-Plus.repo -so /etc/yum.repos.d/Rocky-Plus.repo && curl https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-rockyofficial -so /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial
@@ -75,8 +78,6 @@ case "$distro_id" in
 	#	dnf config-manager --enable plus
 	#fi
 	yum repolist all
-        yum -y update libarchive # workaround for https://bugs.centos.org/view.php?id=18212
-        yum -y install epel-release
 	#dnf config-manager --enable powertools
         yum clean all
         #yum -y install $rpm_packages
