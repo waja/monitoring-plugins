@@ -77,21 +77,23 @@ sed -i 's/procname = "cron"/procname = "sshd"/' ./plugins/t/check_nagios.t
 # apache
 [ -x /usr/sbin/a2enmod ] && a2enmod ssl
 [ -x /usr/sbin/a2ensite ] && a2ensite default-ssl
+[ -x /usr/sbin/a2enflag ] && a2enflag SSL
 # create empty index.html
 [ -d touch /srv/www/htdocs ] && touch touch /srv/www/htdocs/index.html
 # replace snakeoil certs with openssl generated ones as the make-ssl-cert ones
 # seems to cause problems with our plugins
-if [ -d /etc/ssl/private/ ]; then
+if [ -d /etc/apache2/ssl.key/ ]; then
+	KEY="/etc/apache2/ssl.key/server.key"
+	CERT="/etc/apache2/ssl.crt/server.crt"
+	sed -i "s/#SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/" /etc/apache2/ssl-global.conf
+	sed -i "s/#SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/" /etc/apache2/ssl-global.conf
+	ln -s $KEY /etc/apache2/ssl.key/vhost-example.key && ln -s $CERT /etc/apache2/ssl.crt/vhost-example.crt
+elif [ -d /etc/ssl/private/ ]; then
 	KEY="/etc/ssl/private/ssl-cert-snakeoil.key"
 	CERT="/etc/ssl/certs/ssl-cert-snakeoil.pem"
 elif [ -d /etc/pki/tls/private/ ]; then
 	KEY="/etc/pki/tls/private/localhost.key"
 	CERT="/etc/pki/tls/certs/localhost.crt"
-elif [ -d /etc/apache2/ssl.key/ ]; then
-	KEY="/etc/apache2/ssl.key/server.key"
-	CERT="/etc/apache2/ssl.crt/server.crt"
-	sed -i "s/#SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/SSLCertificateFile \/etc\/apache2\/ssl.crt\/server.crt/" /etc/apache2/ssl-global.conf
-	sed -i "s/#SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/SSLCertificateKeyFile \/etc\/apache2\/ssl.key\/server.key/" /etc/apache2/ssl-global.conf
 fi
 rm -f $KEY $CERT
 openssl req -nodes -newkey rsa:2048 -x509 -sha256 -days 365 -nodes -keyout $KEY -out $CERT -subj "/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=$(hostname)"
@@ -104,7 +106,7 @@ else
 	exit 1
 fi
 
-[ -x /usr/sbin/service ] && service $APACHE_BIN restart || $APACHE_BIN
+[ -x /usr/sbin/service ] && service $APACHE_BIN restart || $APACHE_BIN -D SSL
 ps aux | grep -E "(apache|http)"
 
 # squid
