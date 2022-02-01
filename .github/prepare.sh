@@ -128,11 +128,12 @@ case "$distro_id" in
 	#echo -e "[client]\nsocket=/var/run/mysqld/mysqld.sock" >> /etc/my.cnf.d/client.cnf
 	touch /etc/my.cnf.d/client.cnf
 	# Fix socket on rhel
-	sed -i "s/socket=.*mysql.sock/socket=\/var\/run\/mysqld\/mysqld.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
-	#sed -i "s/socket=.*mysql.sock/socket=\/var\/lib\/mysql\/mysql.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
+	#sed -i "s/socket=.*mysql.sock/socket=\/var\/run\/mysqld\/mysqld.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
+	sed -i "s/socket=.*mysql.sock/socket=\/var\/lib\/mysql\/mysql.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
 	# Fix socket on opensuse
-	sed -i "s/# socket =.*mysql.sock/socket=\/var\/run\/mysqld\/mysqld.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
-	#sed -i "s/# socket =.*mysql.sock/socket=\/var\/lib\/mysql\/mysql.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
+	#sed -i "s/# socket =.*mysql.sock/socket=\/var\/run\/mysqld\/mysqld.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
+	sed -i "s/# socket =.*mysql.sock/socket=\/var\/lib\/mysql\/mysql.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
+	sed -i "s/\/var\/run\/mysqld\/mysqld.sock/\/var\/lib\/mysql\/mysql.sock/" .github/NPTest.cache
 	mkdir -p /var/lib/mysql/ /var/log/mariadb /var/log/mysql  && mysql_install_db > /dev/null && chown -R mysql /var/lib/mysql/ /var/log/mariadb /var/log/mysql && cd '/usr' ; /usr/bin/mysqld_safe --datadir='/var/lib/mysql' --nowatch
 	cd $HOME
 	grep -r socket /etc/my.cnf*
