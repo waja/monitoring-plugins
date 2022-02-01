@@ -131,6 +131,8 @@ case "$distro_id" in
 	# Fix socket on opensuse
 	sed -i "s/# socket =.*mysql.sock/socket=\/var\/lib\/mysql\/mysql.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
 	sed -i "s/\/var\/run\/mysqld\/mysqld.sock/\/var\/lib\/mysql\/mysql.sock/" .github/NPTest.cache
+	# fix suse
+	mkdir -p /run/mysql && ln -s /var/lib/mysql/mysql.sock /run/mysql/mysql.sock
 	mkdir -p /var/lib/mysql/ /var/log/mariadb /var/log/mysql  && mysql_install_db > /dev/null && chown -R mysql /var/lib/mysql/ /var/log/mariadb /var/log/mysql && cd '/usr' ; /usr/bin/mysqld_safe --datadir='/var/lib/mysql' --nowatch
 	cd $HOME
 	grep -r socket /etc/my.cnf*
