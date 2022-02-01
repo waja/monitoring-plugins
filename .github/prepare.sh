@@ -125,7 +125,7 @@ case "$distro_id" in
     *)
 	HOME=$(pwd)
 	# Fix client socket
-	echo -e "[mysql]\nsocket=/var/run/mysqld/mysqld.sock" >> /etc/my.cnf.d/client.cnf
+	echo -e "[client]\nsocket=/var/run/mysqld/mysqld.sock" >> /etc/my.cnf.d/client.cnf
 	# Fix socket on rhel
 	sed -i "s/socket=.*mysql.sock/socket=\/var\/run\/mysqld\/mysqld.sock/" /etc/my.cnf /etc/my.cnf.d/*.cnf
 	# Fix socket on opensuse
