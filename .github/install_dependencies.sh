@@ -89,10 +89,10 @@ case "$distro_id" in
         #yum -y install $rpm_packages
         #yum -y install autoconf automake iputils libdbi-devel libtool mysql-devel net-snmp-devel openssh openssl-devel net-snmp-perl net-snmp-utils postfix postgresql-devel procps samba-client freeradius-client-devel rpcbind krb5-devel heimdal-devel iproute httpd perl-Net-SNMP
         # libsmbclient-devel openldap2-devel
-        yum -y install perl which openldap-devel libpq-devel radcli-compat-devel freeradius-devel procps openssl-devel bind-utils net-snmp-perl net-snmp fping net-snmp-utils netcat samba-client vsftpd httpd mod_ssl postfix perl-HTTP-Daemon-SSL perl-Net-DNS openldap-clients openldap-servers gcc make autoconf automake gettext libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb mariadb-server mariadb-devel iputils iproute perl-Net-SNMP openssh-clients libcurl-devel
-	yum -y install curl gettext-devel
+        dnf -y install perl which openldap-devel libpq-devel radcli-compat-devel freeradius-devel procps openssl-devel bind-utils net-snmp-perl net-snmp fping net-snmp-utils netcat samba-client vsftpd httpd mod_ssl postfix perl-HTTP-Daemon-SSL perl-Net-DNS openldap-clients openldap-servers gcc make autoconf automake gettext libfaketime perl-Monitoring-Plugin uriparser-devel squid openssh-server mariadb mariadb-server mariadb-devel iputils iproute perl-Net-SNMP openssh-clients libcurl-devel
+	dnf -y install curl gettext-devel
 	if [ "$platform_id" == "el8" ]; then
-		yum -y install libdbi-devel #libdbi-dbd-sqlite
+		dnf -y install libdbi-devel #libdbi-dbd-sqlite
 	fi
         ;;
 
