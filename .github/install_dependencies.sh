@@ -80,11 +80,7 @@ case "$distro_id" in
 	else
 		dnf config-manager --enable plus crb
 	fi
-	#if [ "$distro_id" == "rocky" -o "$distro_id" == "almalinux" ]; then
-	#	dnf config-manager --enable plus
-	#fi
 	yum repolist all
-	#dnf config-manager --enable powertools
         yum clean all
         #yum -y install $rpm_packages
         #yum -y install autoconf automake iputils libdbi-devel libtool mysql-devel net-snmp-devel openssh openssl-devel net-snmp-perl net-snmp-utils postfix postgresql-devel procps samba-client freeradius-client-devel rpcbind krb5-devel heimdal-devel iproute httpd perl-Net-SNMP
