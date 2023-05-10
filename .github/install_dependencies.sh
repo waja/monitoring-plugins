@@ -66,6 +66,7 @@ case "$distro_id" in
         ;;
 
     'centos'|'rhel'|'almalinux'|'rocky')
+        yum clean metadata
         yum -y update libarchive # workaround for https://bugs.centos.org/view.php?id=18212
         yum -y install epel-release
 	yum -y install dnf
