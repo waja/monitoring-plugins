@@ -32,9 +32,13 @@ case "$distro_id" in
     'debian'|'ubuntu')
         export DEBIAN_FRONTEND=noninteractive
         apt-get update
-        apt-get -y install software-properties-common
         if [ "$distro_id" = "debian" ]; then
-          apt-add-repository non-free
+	  if [ -f /etc/apt/sources.list.d/debian.sources  ]; then
+	    sed "s/main/non-free contrib/g" /etc/apt/sources.list.d/debian.sources > /etc/apt/sources.list.d/debian-nonfree.sources
+	  else
+            apt-get -y install software-properties-common
+            apt-add-repository non-free
+	  fi
           apt-get update
         fi
         apt-get -y install perl autotools-dev libdbi-dev libldap2-dev libpq-dev libradcli-dev libnet-snmp-perl procps
