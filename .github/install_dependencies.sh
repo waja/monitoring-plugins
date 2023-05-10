@@ -75,9 +75,6 @@ case "$distro_id" in
         yum -y install epel-release
 	yum -y install dnf
 	dnf install -y 'dnf-command(config-manager)'
-	if [ "$distro_id" == "almalinux" ]; then
-		curl https://git.rockylinux.org/original/rpms/rocky-release/-/raw/r8/SOURCES/Rocky-Plus.repo -so /etc/yum.repos.d/Rocky-Plus.repo && curl https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-rockyofficial -so /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial
-	fi
 	if [ "$platform_id" == "el8" ]; then
 		dnf config-manager --enable plus powertools
 	else
