@@ -15,3 +15,4 @@ else
   return 1
 fi
 export distro_id=$(grep '^ID=' $os_release_file|awk -F = '{print $2}'|sed 's/\"//g')
+export platform_id=$(grep '^PLATFORM_ID=' /etc/os-release|awk -F = '{print $2}'|sed 's/\"//g'| cut -d":" -f2)
