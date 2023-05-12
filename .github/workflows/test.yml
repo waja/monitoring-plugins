@@ -77,9 +77,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro:
-          - 'debian:testing'
-          #...
         include:
           - distro: 'debian:testing'
             prepare: .github/prepare_debian.sh
