@@ -37,6 +37,37 @@ jobs:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #  macos:
 #    ...
+  artifacts-prep:
+    runs-on: ubuntu-latest
+    name: Prepare artifacts for spec file testing
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v3
+      - name: Set short git commit SHA
+        id: prep
+        run: |
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          #echo "::set-output name=short_sha::$calculatedSha"
+          echo "short_sha=${calculatedSha}" >> "$GITHUB_OUTPUT"
+      - name: Confirm git commit SHA output
+        run: echo ${{ steps.prep.outputs.short_sha }}
+      - name: Download tarball
+        run: |
+          wget -P /tmp https://github.com/monitoring-plugins/monitoring-plugins/archive/${{ steps.prep.outputs.short_sha }}/monitoring-plugins-${{ steps.prep.outputs.short_sha }}.tar.gz 
+      - name: Adjust spec file
+        run: | 
+          sed "s/^%global commit.*/%global commit ${{ steps.prep.outputs.short_sha }}/" .github/monitoring-plugins.spec > /tmp/monitoring-plugins-git.spec
+          sed -i "s/^%global fromgit.*/%global fromgit 1/" /tmp/monitoring-plugins-git.spec 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: monitoring-plugins-${{ steps.prep.outputs.short_sha }}
+          if-no-files-found: error
+          path: |
+            /tmp/monitoring-plugins-${{ steps.prep.outputs.short_sha }}.tar.gz
+            /tmp/monitoring-plugins-git.spec
   linux:
     needs:
       - codespell
