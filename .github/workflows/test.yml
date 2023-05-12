@@ -45,28 +45,21 @@ jobs:
     steps:
       - name: Git clone repository
         uses: actions/checkout@v3
-      - name: Set short git commit SHA
-        id: prep
-        run: |
-          calculatedSha=$(git rev-parse --short ${{ github.sha }})
-          #echo "::set-output name=short_sha::$calculatedSha"
-          echo "short_sha=${calculatedSha}" >> "$GITHUB_OUTPUT"
-      - name: Confirm git commit SHA output
-        run: echo ${{ steps.prep.outputs.short_sha }}
       - name: Download tarball
         run: |
-          wget -P /tmp https://github.com/monitoring-plugins/monitoring-plugins/archive/${{ steps.prep.outputs.short_sha }}/monitoring-plugins-${{ steps.prep.outputs.short_sha }}.tar.gz 
+          wget -P /tmp https://github.com/monitoring-plugins/monitoring-plugins/archive/${{ github.sha }}/monitoring-plugins-${{ github.sha }}.tar.gz 
       - name: Adjust spec file
         run: | 
-          sed "s/^%global commit.*/%global commit ${{ steps.prep.outputs.short_sha }}/" .github/monitoring-plugins.spec > /tmp/monitoring-plugins-git.spec
+          sed "s/^%global commit.*/%global commit ${{ github.sha }}/" .github/monitoring-plugins.spec > /tmp/monitoring-plugins-git.spec
           sed -i "s/^%global fromgit.*/%global fromgit 1/" /tmp/monitoring-plugins-git.spec 
+          sed -i "s/{shortcommit}\.tar\.gz$/{commit}\.tar\.gz/" /tmp/monitoring-plugins-git.spec
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: monitoring-plugins-${{ steps.prep.outputs.short_sha }}
+          name: monitoring-plugins-${{ github.sha }}
           if-no-files-found: error
           path: |
-            /tmp/monitoring-plugins-${{ steps.prep.outputs.short_sha }}.tar.gz
+            /tmp/monitoring-plugins-${{ github.sha }}.tar.gz
             /tmp/monitoring-plugins-git.spec
   linux:
     needs:
@@ -104,3 +97,60 @@ jobs:
                 make test'
           docker container prune -f
           docker volume prune -f
+  rpm-build:
+    needs:
+      - artifacts-prep
+      - codespell
+#      - super-linter
+    runs-on: ubuntu-latest
+    name: Running rpm build tests on ${{ matrix.distro }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          #- {"distro": "Almalinux 9 x86_64", "mock_cfg": "alma+epel-9-x86_64", "sources": "/tmp/monitoring-plugins-${{ steps.prep.outputs.short_sha }}.tar.gz", "spec_file": "/tmp/monitoring-plugins-git.spec"}
+          - {"distro": "Almalinux 9 x86_64", "mock_cfg": "alma+epel-9-x86_64", "spec_file": "monitoring-plugins-git.spec"}
+          #- {"distro": "Fedora Rawhide x86_64", "mock_cfg": "fedora-rawhide-x86_64", "spec_file": "/rpmbuild/monitoring-plugins-git.spec"}
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v3
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: monitoring-plugins-${{ github.sha }}
+          path: /tmp
+      #- name: Setup tmate session, see https://github.com/marketplace/actions/debugging-with-tmate
+      #  uses: mxschmitt/action-tmate@v3
+      - name: Run the tests on ${{ matrix.distro }}
+        run: |
+          #docker volume create --driver local --opt type=tmpfs --opt device=tmpfs --opt o=size=100m,uid=1000 tmp-vol
+          docker run --rm \
+              --privileged=true \
+              --volume="/tmp:/rpmbuild" -w "/rpmbuild" \
+              --volume="/output:/rpmbuild/output" \
+              -e MOUNT_POINT="/rpmbuild" \
+              -e MOCK_CONFIG=${{ matrix.mock_cfg }} \
+              -e SOURCES="monitoring-plugins-${{ github.sha }}.tar.gz" \
+              -e SPEC_FILE=${{ matrix.spec_file }} \
+              -e NETWORK="true" \
+              -e NO_CLEANUP="true" \
+              ghcr.io/waja/mock-rpmbuilder:development
+              #-e NPTEST_ACCEPTDEFAULT=1 \
+              #-e NPTEST_CACHE="/src/.github/NPTest.cache" \
+              #--tmpfs /media/ramdisk1 \
+              #-v /var/run/utmp:/var/run/utmp \
+              #--mount source=tmp-vol,destination=/src,target=/media/ramdisk2 \
+              #${{ matrix.distro }} \
+              #/bin/sh -c '${{ matrix.prepare }} && \
+              #  tools/setup && \
+              #  ./configure --enable-libtap  --with-ipv6=no && \
+              #  make && \
+              #  make test'
+          docker container prune -f
+          docker volume prune -f
+      - name: Run on failure
+        if: ${{ failure() }}
+        run: |
+          ls -la /output/${{ matrix.mock_cfg }} && cd /output/${{ matrix.mock_cfg }} &&
+          cat build-script.sh
+          cat *.log
