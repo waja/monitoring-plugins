@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: devel@monitoring-plugins.org\n"
-"POT-Creation-Date: 2023-06-12 20:31+0200\n"
+"POT-Creation-Date: 2023-06-28 15:51+0000\n"
 "PO-Revision-Date: 2010-04-21 23:38-0400\n"
 "Last-Translator: Thomas Guyot-Sionnest <dermoth@aei.ca>\n"
 "Language-Team: Nagios Plugin Development Mailing List <nagiosplug-"
@@ -242,7 +242,7 @@ msgstr ""
 "multiples options '-C)"
 
 #: plugins/check_by_ssh.c:475 plugins/check_cluster.c:271
-#: plugins/check_dig.c:364 plugins/check_disk.c:1000 plugins/check_http.c:1845
+#: plugins/check_dig.c:364 plugins/check_disk.c:1015 plugins/check_http.c:1845
 #: plugins/check_nagios.c:312 plugins/check_ntp.c:879
 #: plugins/check_ntp_peer.c:733 plugins/check_ntp_time.c:642
 #: plugins/check_procs.c:806 plugins/negate.c:249 plugins/urlize.c:179
@@ -250,7 +250,7 @@ msgid "Examples:"
 msgstr "Exemples:"
 
 #: plugins/check_by_ssh.c:490 plugins/check_cluster.c:284
-#: plugins/check_dig.c:376 plugins/check_disk.c:1017 plugins/check_dns.c:617
+#: plugins/check_dig.c:376 plugins/check_disk.c:1032 plugins/check_dns.c:617
 #: plugins/check_dummy.c:122 plugins/check_fping.c:524 plugins/check_game.c:331
 #: plugins/check_hpjd.c:439 plugins/check_http.c:1883 plugins/check_ldap.c:511
 #: plugins/check_load.c:372 plugins/check_mrtg.c:382 plugins/check_mysql.c:587
@@ -410,7 +410,7 @@ msgstr ""
 msgid "DISK %s: %s not found\n"
 msgstr "DISK %s: %s non trouvé\n"
 
-#: plugins/check_disk.c:241 plugins/check_disk.c:1035 plugins/check_dns.c:295
+#: plugins/check_disk.c:241 plugins/check_disk.c:1050 plugins/check_dns.c:295
 #: plugins/check_dummy.c:74 plugins/check_mysql.c:313
 #: plugins/check_nagios.c:104 plugins/check_nagios.c:168
 #: plugins/check_nagios.c:172 plugins/check_pgsql.c:575
@@ -420,190 +420,190 @@ msgstr "DISK %s: %s non trouvé\n"
 msgid "CRITICAL"
 msgstr "CRITIQUE"
 
-#: plugins/check_disk.c:645
+#: plugins/check_disk.c:660
 #, c-format
 msgid "unit type %s not known\n"
 msgstr "unité de type %s inconnue\n"
 
-#: plugins/check_disk.c:648
+#: plugins/check_disk.c:663
 #, c-format
 msgid "failed allocating storage for '%s'\n"
 msgstr "Impossible d'allouer de l'espace pour '%s'\n"
 
-#: plugins/check_disk.c:676 plugins/check_disk.c:724 plugins/check_disk.c:732
-#: plugins/check_disk.c:740 plugins/check_disk.c:744 plugins/check_disk.c:789
-#: plugins/check_disk.c:795 plugins/check_disk.c:818 plugins/check_dummy.c:77
+#: plugins/check_disk.c:691 plugins/check_disk.c:739 plugins/check_disk.c:747
+#: plugins/check_disk.c:755 plugins/check_disk.c:759 plugins/check_disk.c:804
+#: plugins/check_disk.c:810 plugins/check_disk.c:833 plugins/check_dummy.c:77
 #: plugins/check_dummy.c:80 plugins/check_pgsql.c:617 plugins/check_procs.c:547
 #, c-format
 msgid "UNKNOWN"
 msgstr "INCONNU"
 
-#: plugins/check_disk.c:676
+#: plugins/check_disk.c:691
 msgid "Must set a threshold value before using -p\n"
 msgstr ""
 
-#: plugins/check_disk.c:724
+#: plugins/check_disk.c:739
 msgid "Must set -E before selecting paths\n"
 msgstr ""
 
-#: plugins/check_disk.c:732
+#: plugins/check_disk.c:747
 msgid "Must set group value before selecting paths\n"
 msgstr ""
 
-#: plugins/check_disk.c:740
+#: plugins/check_disk.c:755
 msgid ""
 "Paths need to be selected before using -i/-I. Use -A to select all paths "
 "explicitly"
 msgstr ""
 
-#: plugins/check_disk.c:744 plugins/check_disk.c:795 plugins/check_procs.c:547
+#: plugins/check_disk.c:759 plugins/check_disk.c:810 plugins/check_procs.c:547
 msgid "Could not compile regular expression"
 msgstr "Impossible de compiler l'expression rationnelle"
 
-#: plugins/check_disk.c:789
+#: plugins/check_disk.c:804
 msgid "Must set a threshold value before using -r/-R\n"
 msgstr ""
 
-#: plugins/check_disk.c:819
+#: plugins/check_disk.c:834
 msgid "Regular expression did not match any path or disk"
 msgstr ""
 
-#: plugins/check_disk.c:865
+#: plugins/check_disk.c:880
 msgid "Unknown argument"
 msgstr "Argument inconnu"
 
-#: plugins/check_disk.c:899
+#: plugins/check_disk.c:914
 #, c-format
 msgid " for %s\n"
 msgstr " pour %s\n"
 
-#: plugins/check_disk.c:928
+#: plugins/check_disk.c:943
 msgid ""
 "This plugin checks the amount of used disk space on a mounted file system"
 msgstr "Ce plugin vérifie la place utilisé sur un système de fichier monté"
 
-#: plugins/check_disk.c:929
+#: plugins/check_disk.c:944
 msgid ""
 "and generates an alert if free space is less than one of the threshold values"
 msgstr ""
 "et génère une alerte si la place disponible est plus petite qu'un des seuils "
 "fourni"
 
-#: plugins/check_disk.c:939
+#: plugins/check_disk.c:954
 msgid "Exit with WARNING status if less than INTEGER units of disk are free"
 msgstr ""
 "Sortir avec un résultat AVERTISSEMENT si moins de X unités de disques sont "
 "libres"
 
-#: plugins/check_disk.c:941
+#: plugins/check_disk.c:956
 msgid "Exit with WARNING status if less than PERCENT of disk space is free"
 msgstr ""
 "Sortir avec un résultat AVERTISSEMENT si moins de X pour-cent du disque est "
 "libre"
 
-#: plugins/check_disk.c:943
+#: plugins/check_disk.c:958
 msgid "Exit with CRITICAL status if less than INTEGER units of disk are free"
 msgstr ""
 "Sortir avec un résultat CRITIQUE si moins de X unités du disque sont libres"
 
-#: plugins/check_disk.c:945
+#: plugins/check_disk.c:960
 #, fuzzy
 msgid "Exit with CRITICAL status if less than PERCENT of disk space is free"
 msgstr ""
 "Sortir avec un résultat CRITIQUE si moins de X pour-cent du disque est libre"
 
-#: plugins/check_disk.c:947
+#: plugins/check_disk.c:962
 msgid "Exit with WARNING status if less than PERCENT of inode space is free"
 msgstr ""
 "Sortir avec un résultat AVERTISSEMENT si moins de X pour-cent des inodes "
 "sont libres"
 
-#: plugins/check_disk.c:949
+#: plugins/check_disk.c:964
 msgid "Exit with CRITICAL status if less than PERCENT of inode space is free"
 msgstr ""
 "Sortir avec un résultat CRITIQUE si moins de X pour-cent des inodes sont "
 "libres"
 
-#: plugins/check_disk.c:951
+#: plugins/check_disk.c:966
 msgid ""
 "Mount point or block device as emitted by the mount(8) command (may be "
 "repeated)"
 msgstr ""
 
-#: plugins/check_disk.c:953
+#: plugins/check_disk.c:968
 msgid "Ignore device (only works if -p unspecified)"
 msgstr "Ignorer le périphérique (marche seulement lorsque -p est utilisé)"
 
-#: plugins/check_disk.c:955
+#: plugins/check_disk.c:970
 msgid "Clear thresholds"
 msgstr "Effacer les seuils"
 
-#: plugins/check_disk.c:957
+#: plugins/check_disk.c:972
 msgid "For paths or partitions specified with -p, only check for exact paths"
 msgstr ""
 
-#: plugins/check_disk.c:959
+#: plugins/check_disk.c:974
 msgid "Display only devices/mountpoints with errors"
 msgstr "Afficher seulement les périphériques/point de montage avec des erreurs"
 
-#: plugins/check_disk.c:961
+#: plugins/check_disk.c:976
 msgid "Don't account root-reserved blocks into freespace in perfdata"
 msgstr ""
 
-#: plugins/check_disk.c:963
+#: plugins/check_disk.c:978
 msgid "Display inode usage in perfdata"
 msgstr ""
 
-#: plugins/check_disk.c:965
+#: plugins/check_disk.c:980
 msgid ""
 "Group paths. Thresholds apply to (free-)space of all partitions together"
 msgstr ""
 
-#: plugins/check_disk.c:967
+#: plugins/check_disk.c:982
 msgid "Same as '--units kB'"
 msgstr "Pareil à '--units kB'"
 
-#: plugins/check_disk.c:969
+#: plugins/check_disk.c:984
 msgid "Only check local filesystems"
 msgstr "Vérifier seulement les systèmes de fichiers locaux"
 
-#: plugins/check_disk.c:971
+#: plugins/check_disk.c:986
 msgid ""
 "Only check local filesystems against thresholds. Yet call stat on remote "
 "filesystems"
 msgstr ""
 
-#: plugins/check_disk.c:972
+#: plugins/check_disk.c:987
 msgid "to test if they are accessible (e.g. to detect Stale NFS Handles)"
 msgstr ""
 
-#: plugins/check_disk.c:974
+#: plugins/check_disk.c:989
 #, fuzzy
 msgid "Display the (block) device instead of the mount point"
 msgstr "Afficher le point de montage au lieu de la partition"
 
-#: plugins/check_disk.c:976
+#: plugins/check_disk.c:991
 msgid "Same as '--units MB'"
 msgstr "Pareil à '--units MB'"
 
-#: plugins/check_disk.c:978
+#: plugins/check_disk.c:993
 msgid "Explicitly select all paths. This is equivalent to -R '.*'"
 msgstr ""
 
-#: plugins/check_disk.c:980
+#: plugins/check_disk.c:995
 msgid ""
 "Case insensitive regular expression for path/partition (may be repeated)"
 msgstr ""
 "Expression rationnelle indépendante de la case pour un répertoire ou une "
 "partition (peut être utilisé plusieurs fois)"
 
-#: plugins/check_disk.c:982
+#: plugins/check_disk.c:997
 msgid "Regular expression for path or partition (may be repeated)"
 msgstr ""
 "Expression rationnelle pour un répertoire ou une partition (peut être "
 "utilisé plusieurs fois)"
 
-#: plugins/check_disk.c:984
+#: plugins/check_disk.c:999
 msgid ""
 "Regular expression to ignore selected path/partition (case insensitive) (may "
 "be repeated)"
@@ -611,68 +611,68 @@ msgstr ""
 "Expression rationnelle pour ignorer un répertoire ou une partition (peut "
 "être utilisé plusieurs fois)"
 
-#: plugins/check_disk.c:986
+#: plugins/check_disk.c:1001
 msgid ""
 "Regular expression to ignore selected path or partition (may be repeated)"
 msgstr ""
 "Expression rationnelle pour ignorer un répertoire ou une partition (peut "
 "être utilisé plusieurs fois)"
 
-#: plugins/check_disk.c:988
+#: plugins/check_disk.c:1003
 msgid ""
 "Return OK if no filesystem matches, filesystem does not exist or is "
 "inaccessible."
 msgstr ""
 
-#: plugins/check_disk.c:989
+#: plugins/check_disk.c:1004
 msgid "(Provide this option before -p / -r / --ereg-path if used)"
 msgstr ""
 
-#: plugins/check_disk.c:992
+#: plugins/check_disk.c:1007
 msgid "Choose bytes, kB, MB, GB, TB (default: MB)"
 msgstr "Choisissez octets, kb, MB, GB, TB (par défaut: MB)"
 
-#: plugins/check_disk.c:995
+#: plugins/check_disk.c:1010
 msgid "Ignore all filesystems of indicated type (may be repeated)"
 msgstr ""
 "Ignorer tout les systèmes de fichiers qui correspondent au type indiqué "
 "(peut être utilisé plusieurs fois)"
 
-#: plugins/check_disk.c:997
+#: plugins/check_disk.c:1012
 #, fuzzy
 msgid "Check only filesystems of indicated type (may be repeated)"
 msgstr ""
 "Ignorer tout les systèmes de fichiers qui correspondent au type indiqué "
 "(peut être utilisé plusieurs fois)"
 
-#: plugins/check_disk.c:1002
+#: plugins/check_disk.c:1017
 msgid "Checks /tmp and /var at 10% and 5%, and / at 100MB and 50MB"
 msgstr "Vérifie /tmp à 10% et /var à 5% et / à 100MB et 50MB"
 
-#: plugins/check_disk.c:1004
+#: plugins/check_disk.c:1019
 msgid ""
 "Checks all filesystems not matching -r at 100M and 50M. The fs matching the -"
 "r regex"
 msgstr ""
 
-#: plugins/check_disk.c:1005
+#: plugins/check_disk.c:1020
 msgid ""
 "are grouped which means the freespace thresholds are applied to all disks "
 "together"
 msgstr ""
 
-#: plugins/check_disk.c:1007
+#: plugins/check_disk.c:1022
 msgid ""
 "Checks /foo for 1000M/500M and /bar for 5/3%. All remaining volumes use "
 "100M/50M"
 msgstr ""
 
-#: plugins/check_disk.c:1036
+#: plugins/check_disk.c:1051
 #, c-format
 msgid "%s %s: %s\n"
 msgstr ""
 
-#: plugins/check_disk.c:1036
+#: plugins/check_disk.c:1051
 msgid "is not accessible"
 msgstr ""
 
