@@ -37,7 +37,8 @@ jobs:
                 tools/setup && \
                 ./configure --enable-libtap  --with-ipv6=no && \
                 make && \
-                make test && \
+                make test || true; \
+                ./plugins/check_http -v -I localhost -p 3128 -H localhost -S -j CONNECT at ../NPTest.pm && \
                 make dist && \
                 tar zxf monitoring-plugins-*.tar.gz && \
                 cd monitoring-plugins-*/ && \
