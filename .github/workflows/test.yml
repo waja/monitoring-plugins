@@ -56,6 +56,7 @@ jobs:
           - {"distro": "fedora:latest", "build": ".github/mock.sh"}
           - {"distro": "rockylinux:8", "build": ".github/mock.sh"}
           - {"distro": "almalinux:9", "build": ".github/mock.sh"}
+          - {"distro": "almalinux:10", "build": ".github/mock.sh"}
 #          - {"distro": "oraclelinux:9", "build": ".github/mock.sh"}
     steps:
       - name: Git clone repository
