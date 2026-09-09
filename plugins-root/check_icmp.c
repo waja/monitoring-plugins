@@ -90,10 +90,6 @@ const char *email = "devel@monitoring-plugins.org";
 #	define INADDR_NONE (in_addr_t)(-1)
 #endif
 
-#ifndef SOL_IP
-#	define SOL_IP 0
-#endif
-
 /* we bundle these in one #ifndef, since they're all from BSD
  * Put individual #ifndef's around those that bother you */
 #ifndef ICMP_UNREACH_NET_UNKNOWN
@@ -922,7 +918,7 @@ int main(int argc, char **argv) {
 #endif // __OpenBSD__
 
 	if (sockset.socket4 != -1) {
-		int result = setsockopt(sockset.socket4, SOL_IP, IP_TTL, &config.ttl, sizeof(config.ttl));
+		int result = setsockopt(sockset.socket4, IPPROTO_IP, IP_TTL, &config.ttl, sizeof(config.ttl));
 		if (debug) {
 			if (result == -1) {
 				printf("setsockopt failed\n");
@@ -933,7 +929,7 @@ int main(int argc, char **argv) {
 	}
 
 	if (sockset.socket6 != -1) {
-		int result = setsockopt(sockset.socket6, SOL_IP, IP_TTL, &config.ttl, sizeof(config.ttl));
+		int result = setsockopt(sockset.socket6, IPPROTO_IPV6, IPV6_UNICAST_HOPS, &config.ttl, sizeof(config.ttl));
 		if (debug) {
 			if (result == -1) {
 				printf("setsockopt failed\n");
