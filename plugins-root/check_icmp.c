@@ -881,29 +881,40 @@ int main(int argc, char **argv) {
 		}
 
 #ifdef SO_TIMESTAMP
-		if (sockset.socket4 != -1) {
-			int on = 1;
-			if (setsockopt(sockset.socket4, SOL_SOCKET, SO_TIMESTAMP, &on, sizeof(on))) {
-				if (debug) {
-					printf("Warning: no SO_TIMESTAMP support\n");
-				}
-			}
-		}
-		if (sockset.socket6 != -1) {
-			int on = 1;
-			if (setsockopt(sockset.socket6, SOL_SOCKET, SO_TIMESTAMP, &on, sizeof(on))) {
-				if (debug) {
-					printf("Warning: no SO_TIMESTAMP support\n");
-				}
-			}
+		int on = 1;
+		if (setsockopt(sockset.socket4, SOL_SOCKET, SO_TIMESTAMP, &on, sizeof(on))) {
+			crash("setsockopt SO_TIMESTAMP");
+		} else if (debug) {
+			printf("enables reception of timestamp\n");
 		}
 #endif // SO_TIMESTAMP
+
+		if (setsockopt(sockset.socket4, IPPROTO_IP, IP_TTL, &config.ttl, sizeof(config.ttl))) {
+			crash("setsockopt IP_TTL");
+		} else if (debug) {
+			printf("ttl set to %d\n", config.ttl);
+		}
 	}
 
 	if (config.need_v6) {
 		sockset.socket6 = socket(AF_INET6, SOCK_RAW, IPPROTO_ICMPV6);
 		if (sockset.socket6 == -1) {
 			crash("Failed to obtain ICMP v6 socket");
+		}
+
+#ifdef SO_TIMESTAMP
+		int on = 1;
+		if (setsockopt(sockset.socket6, SOL_SOCKET, SO_TIMESTAMP, &on, sizeof(on))) {
+			crash("setsockopt SO_TIMESTAMP");
+		} else if (debug) {
+			printf("enables reception of timestamp\n");
+		}
+#endif // SO_TIMESTAMP
+
+		if (setsockopt(sockset.socket6, IPPROTO_IPV6, IPV6_UNICAST_HOPS, &config.ttl, sizeof(config.ttl))) {
+			crash("setsockopt IPV6_UNICAST_HOPS");
+		} else if (debug) {
+			printf("hop limit set to %d\n", config.ttl);
 		}
 	}
 
@@ -916,28 +927,6 @@ int main(int argc, char **argv) {
 #ifdef __OpenBSD__
 	pledge("stdio inet", NULL);
 #endif // __OpenBSD__
-
-	if (sockset.socket4 != -1) {
-		int result = setsockopt(sockset.socket4, IPPROTO_IP, IP_TTL, &config.ttl, sizeof(config.ttl));
-		if (debug) {
-			if (result == -1) {
-				printf("setsockopt failed\n");
-			} else {
-				printf("ttl set to %lu\n", config.ttl);
-			}
-		}
-	}
-
-	if (sockset.socket6 != -1) {
-		int result = setsockopt(sockset.socket6, IPPROTO_IPV6, IPV6_UNICAST_HOPS, &config.ttl, sizeof(config.ttl));
-		if (debug) {
-			if (result == -1) {
-				printf("setsockopt failed\n");
-			} else {
-				printf("ttl set to %lu\n", config.ttl);
-			}
-		}
-	}
 
 	/* make sure we don't wait any longer than necessary */
 	struct timeval prog_start;
