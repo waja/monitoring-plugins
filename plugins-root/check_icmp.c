@@ -921,7 +921,7 @@ int main(int argc, char **argv) {
 	pledge("stdio inet", NULL);
 #endif // __OpenBSD__
 
-	if (sockset.socket4) {
+	if (sockset.socket4 != -1) {
 		int result = setsockopt(sockset.socket4, SOL_IP, IP_TTL, &config.ttl, sizeof(config.ttl));
 		if (debug) {
 			if (result == -1) {
@@ -932,7 +932,7 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	if (sockset.socket6) {
+	if (sockset.socket6 != -1) {
 		int result = setsockopt(sockset.socket6, SOL_IP, IP_TTL, &config.ttl, sizeof(config.ttl));
 		if (debug) {
 			if (result == -1) {
@@ -1010,10 +1010,10 @@ int main(int argc, char **argv) {
 		   config.number_of_targets, &program_state, config.hosts, config.number_of_hosts,
 		   &overall);
 
-	if (sockset.socket4) {
+	if (sockset.socket4 != -1) {
 		close(sockset.socket4);
 	}
-	if (sockset.socket6) {
+	if (sockset.socket6 != -1) {
 		close(sockset.socket6);
 	}
 
