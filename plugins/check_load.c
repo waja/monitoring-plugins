@@ -117,6 +117,27 @@ static parsed_thresholds get_threshold(char *arg) {
 }
 
 int main(int argc, char **argv) {
+#ifdef __OpenBSD__
+	/* Restrict program execution to the ps binary. Continue allow reading all
+	 * files since arguments were not parsed at this point. */
+	char *ps_command, *ps_binary;
+	ps_command = malloc(strnlen(PS_COMMAND, BUFSIZ));
+
+	(void)strlcpy(ps_command, PS_COMMAND, strnlen(PS_COMMAND, BUFSIZ));
+	if (!(ps_binary = strtok(ps_command, " "))) {
+		die(STATE_UNKNOWN, "Cannot extract binary from %s", PS_COMMAND);
+	}
+	unveil(ps_binary, "rx");
+	free(ps_command);
+
+	unveil("/", "r");
+	unveil(NULL, NULL);
+
+	/* - rpath is required to read --extra-opts (given up later)
+	 * - proc and exec are used to fork and exec (given up later) */
+	pledge("stdio rpath proc exec", NULL);
+#endif // __OpenBSD__
+
 	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
@@ -131,6 +152,12 @@ int main(int argc, char **argv) {
 	}
 
 	const check_load_config config = tmp_config.config;
+
+#ifdef __OpenBSD__
+	if (config.n_procs_to_show == 0) {
+		pledge("stdio", NULL);
+	}
+#endif // __OpenBSD__
 
 	double load_values[3] = {0, 0, 0};
 
@@ -272,6 +299,10 @@ int main(int argc, char **argv) {
 		}
 
 		mp_add_subcheck_to_check(&overall, top_proc_sc);
+
+#ifdef __OpenBSD__
+		pledge("stdio", NULL);
+#endif // __OpenBSD__
 	}
 
 	mp_exit(overall);
