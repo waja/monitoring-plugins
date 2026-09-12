@@ -84,6 +84,10 @@ void print_usage(void);
 static int verbose = 0;
 
 static int stat_exe(const pid_t pid, struct stat *buf) {
+#ifdef __OpenBSD__
+	/* There is no procfs on OpenBSD. Use the "traditional" method instead. */
+	return -1;
+#endif // __OpenBSD__
 	char *path;
 	mopl_utils_xasprintf(&path, "/proc/%d/exe", pid);
 	int ret = stat(path, buf);
@@ -92,6 +96,27 @@ static int stat_exe(const pid_t pid, struct stat *buf) {
 }
 
 int main(int argc, char **argv) {
+#ifdef __OpenBSD__
+	/* Restrict program execution to the ps binary. Continue allow reading all
+	 * files since arguments were not parsed at this point. */
+	char *ps_command, *ps_binary;
+	ps_command = malloc(strnlen(PS_COMMAND, BUFSIZ));
+
+	(void)strlcpy(ps_command, PS_COMMAND, strnlen(PS_COMMAND, BUFSIZ));
+	if (!(ps_binary = strtok(ps_command, " "))) {
+		die(STATE_UNKNOWN, "Cannot extract binary from %s", PS_COMMAND);
+	}
+	unveil(ps_binary, "rx");
+	free(ps_command);
+
+	unveil("/", "r");
+	unveil(NULL, NULL);
+
+	/* - rpath is required to read --input-path, --extra-opts (given up later)
+	 * - proc and exec are used to fork and exec (given up later) */
+	pledge("stdio rpath proc exec", NULL);
+#endif // __OpenBSD__
+
 	setlocale(LC_ALL, "");
 	setlocale(LC_NUMERIC, "POSIX");
 	bindtextdomain(PACKAGE, LOCALEDIR);
@@ -144,6 +169,10 @@ int main(int argc, char **argv) {
 	} else {
 		result = cmd_file_read(config.input_filename, &chld_out, 0);
 	}
+
+#ifdef __OpenBSD__
+	pledge("stdio", NULL);
+#endif // __OpenBSD__
 
 	int pos; /* number of spaces before 'args' in `ps` output */
 	uid_t procuid = 0;

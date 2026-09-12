@@ -68,6 +68,36 @@ static int verbose = 0;
 static char *warn_text;
 
 int main(int argc, char **argv) {
+#ifdef __OpenBSD__
+	/* Restrict program execution to the ping{,6} binaries. Continue allow
+	 * reading all files since arguments were not parsed at this point. */
+	char *ping_command, *ping_binary;
+	ping_command = malloc(strnlen(PING6_COMMAND, BUFSIZ));
+
+	(void)strlcpy(ping_command, PING_COMMAND, strnlen(PING_COMMAND, BUFSIZ));
+	if (!(ping_binary = strtok(ping_command, " "))) {
+		die(STATE_UNKNOWN, "Cannot extract binary from %s", PING_COMMAND);
+	}
+	unveil(ping_binary, "rx");
+
+	(void)strlcpy(ping_command, PING6_COMMAND, strnlen(PING6_COMMAND, BUFSIZ));
+	if (!(ping_binary = strtok(ping_command, " "))) {
+		die(STATE_UNKNOWN, "Cannot extract binary from %s", PING6_COMMAND);
+	}
+	unveil(ping_binary, "rx");
+
+	free(ping_command);
+
+	unveil("/", "r");
+	unveil(NULL, NULL);
+
+	/* - rpath is required to read --extra-opts
+	 * - dns for hostname resolution via mopl_net_is_host
+	 * - proc and exec are used to fork and exec
+	 * No promise is given up as they are all required within a loop. */
+	pledge("stdio rpath dns proc exec", NULL);
+#endif // __OpenBSD__
+
 	setlocale(LC_ALL, "");
 	setlocale(LC_NUMERIC, "C");
 	bindtextdomain(PACKAGE, LOCALEDIR);

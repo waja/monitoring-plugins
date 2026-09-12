@@ -68,6 +68,12 @@ const char *copyright = "2000-2024";
 const char *email = "devel@monitoring-plugins.org";
 
 int main(int argc, char **argv) {
+#ifdef __OpenBSD__
+	/* - rpath is required to read --extra-opts (given up later)
+	 * - vminfo is required for swapctl(2) (given up later) */
+	pledge("stdio rpath vminfo", NULL);
+#endif // __OpenBSD__
+
 	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
@@ -81,6 +87,10 @@ int main(int argc, char **argv) {
 		mopl_utils_usage4(_("Could not parse arguments"));
 	}
 
+#ifdef __OpenBSD__
+	pledge("stdio vminfo", NULL);
+#endif // __OpenBSD__
+
 	swap_config config = tmp.config;
 
 	swap_result data = get_swap_data(config);
@@ -89,6 +99,10 @@ int main(int argc, char **argv) {
 		puts("SWAP UNKNOWN - Failed to retrieve Swap usage");
 		exit(STATE_UNKNOWN);
 	}
+
+#ifdef __OpenBSD__
+	pledge("stdio", NULL);
+#endif // __OpenBSD__
 
 	if (verbose) {
 		printf("Swap retrieval result:\n"

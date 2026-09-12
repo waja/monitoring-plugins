@@ -115,6 +115,11 @@ const byte_unit PetaBytes_factor = 1000000000000000;
 const byte_unit ExaBytes_factor = 1000000000000000000;
 
 int main(int argc, char **argv) {
+#ifdef __OpenBSD__
+	/* - rpath is required to read --extra-opts and the partitions */
+	pledge("stdio rpath", NULL);
+#endif // __OpenBSD__
+
 	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
